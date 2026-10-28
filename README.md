@@ -71,14 +71,6 @@ The dashboard converts these readings into a visual radar display, helping users
 
 **Note:** Browser serial access requires a compatible browser and a secure context, such as `localhost`.
 
-## 📁 PROJECT STRUCTURE
-
-```text
-Arduino-Ultrasonic-Radar/
-├── Arduino-Ultrasonic-Radar.ino
-├── radar.html
-└── README.md
-```
 
 ## 🌐 APPLICATIONS
 
