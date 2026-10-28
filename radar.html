@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arduino Ultrasonic Radar</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #06130f;
+  color: #d9fff0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  color: #42ffad;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: #9abaae;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 12px;
+  background: #087f5b;
+  color: white;
+  border: 1px solid #42ffad;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0ba879;
+}
+
+#status {
+  color: #42ffad;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  margin: 20px auto;
+  background: #071d16;
+  border: 1px solid #26875f;
+  border-radius: 12px;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card {
+  background: #10251e;
+  border: 1px solid #237453;
+  border-radius: 10px;
+  padding: 12px 22px;
+  min-width: 150px;
+}
+
+.card h3 {
+  color: #9abaae;
+  font-size: 14px;
+}
+
+.card p {
+  color: #42ffad;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+footer {
+  margin-top: 30px;
+  color: #78988a;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>ULTRASONIC RADAR</h1>
+<p class="subtitle">
+  Arduino-Based Real-Time Object Detection System
+</p>
+
+<button id="connect">Connect Arduino</button>
+<p id="status">Status: Disconnected</p>
+
+<canvas id="radar" width="800" height="450"></canvas>
+
+<div class="info">
+  <div class="card">
+    <h3>SCANNING ANGLE</h3>
+    <p><span id="angle">--</span>°</p>
+  </div>
+
+  <div class="card">
+    <h3>DISTANCE</h3>
+    <p><span id="distance">--</span> cm</p>
+  </div>
+
+  <div class="card">
+    <h3>OBJECT STATUS</h3>
+    <p id="object">Waiting...</p>
+  </div>
+</div>
+
+<footer>
+  Built using Arduino UNO, HC-SR04 and Servo Motor
+</footer>
+
+<script>
+const canvas = document.getElementById("radar");
+const ctx = canvas.getContext("2d");
+
+let angle = 90;
+let distance = 0;
+let detections = [];
+
+function drawRadar() {
+  const cx = canvas.width / 2;
+  const cy = canvas.height - 20;
+  const radius = Math.min(
+    canvas.width / 2 - 25,
+    canvas.height - 45
+  );
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw radar range arcs
+  ctx.strokeStyle = "#237453";
+  ctx.lineWidth = 1;
+
+  for (let i = 1; i <= 4; i++) {
+    ctx.beginPath();
+    ctx.arc(
+      cx, cy, radius * i / 4,
+      Math.PI, 2 * Math.PI
+    );
+    ctx.stroke();
+
+    ctx.fillStyle = "#42ffad";
+    ctx.font = "12px Arial";
+    ctx.fillText(
+      `${i * 25} cm`,
+      cx + 5,
+      cy - radius * i / 4
+    );
+  }
+
+  // Draw angle guide lines
+  for (let a = 0; a <= 180; a += 30) {
+    const rad = Math.PI - a * Math.PI / 180;
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(
+      cx + radius * Math.cos(rad),
+      cy - radius * Math.sin(rad)
+    );
+    ctx.stroke();
+  }
+
+  // Draw scanning line
+  const rad = Math.PI - angle * Math.PI / 180;
+
+  ctx.strokeStyle = "#42ffad";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(
+    cx + radius * Math.cos(rad),
+    cy - radius * Math.sin(rad)
+  );
+  ctx.stroke();
+
+  // Plot detected objects
+  detections.forEach(item => {
+    if (item.distance <= 0 || item.distance > 100) return;
+
+    const r = radius * item.distance / 100;
+    const a = Math.PI - item.angle * Math.PI / 180;
+
+    const x = cx + r * Math.cos(a);
+    const y = cy - r * Math.sin(a);
+
+    ctx.fillStyle = "#ff5252";
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, 2 * Math.PI);
+    ctx.fill();
+  });
+
+  // Radar center
+  ctx.fillStyle = "#42ffad";
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+  ctx.fill();
+}
+
+function updateRadar(a, d) {
+  angle = a;
+  distance = d;
+
+  document.getElementById("angle").textContent = a;
+  document.getElementById("distance").textContent =
+    d > 0 ? d : "--";
+
+  let status;
+
+  if (d > 0 && d <= 30) {
+    status = "Nearby!";
+  } else if (d > 30 && d <= 100) {
+    status = "Detected";
+  } else {
+    status = "No Object";
+  }
+
+  document.getElementById("object").textContent = status;
+
+  if (d > 0 && d <= 100) {
+    detections.push({ angle: a, distance: d });
+
+    if (detections.length > 150) {
+      detections.shift();
+    }
+  }
+
+  drawRadar();
+}
+
+drawRadar();
+
+// Connect to Arduino using Web Serial API
+document.getElementById("connect").addEventListener(
+  "click", async () => {
+
+    const status = document.getElementById("status");
+    const button = document.getElementById("connect");
+
+    if (!("serial" in navigator)) {
+      status.textContent =
+        "Use Chrome or Edge on desktop via localhost.";
+      return;
+    }
+
+    let port;
+
+    try {
+      port = await navigator.serial.requestPort();
+      await port.open({ baudRate: 9600 });
+
+      status.textContent = "Status: Connected";
+      button.disabled = true;
+
+      const decoder = new TextDecoderStream();
+      const closed = port.readable.pipeTo(decoder.writable);
+      const reader = decoder.readable.getReader();
+
+      let buffer = "";
+
+      try {
+        while (true) {
+          const { value, done } = await reader.read();
+
+          if (done) break;
+
+          buffer += value;
+          const lines = buffer.split(/\r?\n/);
+          buffer = lines.pop();
+
+          for (const line of lines) {
+            const parts = line.trim().split(",");
+
+            if (parts.length !== 2) continue;
+
+            const a = Number(parts[0]);
+            const d = Number(parts[1]);
+
+            if (
+              Number.isFinite(a) &&
+              Number.isFinite(d) &&
+              a >= 0 && a <= 180 && d >= 0
+            ) {
+              updateRadar(a, d);
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+        await port.close().catch(() => {});
+        await closed.catch(() => {});
+      }
+
+    } catch (error) {
+      status.textContent = "Connection failed: " + error.message;
+    } finally {
+      button.disabled = false;
+    }
+  }
+);
+</script>
+
+</body>
+</html>
