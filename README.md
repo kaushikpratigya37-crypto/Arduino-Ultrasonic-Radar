@@ -29,7 +29,8 @@ The dashboard converts these readings into a visual radar display, helping users
 
 <img src="https://placehold.co/900x400/020B08/39FF9C?text=ULTRASONIC+RADAR%0AReplace+with+your+dashboard+screenshot" width="100%" alt="Radar dashboard placeholder"/>
 
-*Live radar visualization — replace this preview with a screenshot of your actual dashboard.*
+*Live radar visualization — <img width="1200" height="1600" alt="WhatsApp Image 2026-10-28 at 14 14 25" src="https://github.com/user-attachments/assets/d48ae2fa-17bd-4184-bc4b-f8ae2bae09e7" />
+*
 
 </div>
 
