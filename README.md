@@ -35,8 +35,6 @@ The system also includes an LED and buzzer for proximity alerts when an object i
 
 ### 🔬 Actual Hardware Setup
 
-<img src="./images/ultrasonic-radar-setup.jpeg" width="85%" alt="Actual Ultrasonic Radar Hardware Setup"/>
-
 *Arduino hardware setup with ultrasonic sensor, circuit connections and live radar dashboard.*
 
 <br>
