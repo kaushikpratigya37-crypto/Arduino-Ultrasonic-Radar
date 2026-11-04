@@ -1,91 +1,54 @@
+# 🟢 ULTRASONIC RADAR SYSTEM
 
 <div align="center">
 
-# 🟢 ULTRASONIC RADAR
+### `DETECT • SCAN • VISUALIZE`
 
-**Detect · Scan · Visualize**
+**An Arduino-Based Real-Time Object Detection & Radar Visualization System**
 
-*An Arduino-powered object detection and real-time radar visualization system.*
+An embedded hardware-software integration project that transforms ultrasonic sensor readings into an interactive, real-time radar display.
+
+<br>
 
 ![Arduino](https://img.shields.io/badge/Arduino-UNO-00FF9C?style=for-the-badge&logo=arduino&logoColor=black)
-![Sensor](https://img.shields.io/badge/HC--SR04-Ultrasonic-071B12?style=for-the-badge)
-![Dashboard](https://img.shields.io/badge/Web-Radar%20Dashboard-071B12?style=for-the-badge&logo=html5)
+![Language](https://img.shields.io/badge/Language-C%2B%2B-071B12?style=for-the-badge&logo=cplusplus)
+![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS-00FF9C?style=for-the-badge&logo=html5&logoColor=black)
+![JavaScript](https://img.shields.io/badge/JavaScript-Interactive-071B12?style=for-the-badge&logo=javascript)
 
-<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00140D,100:063D29&height=8" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=rect&color=0:00140D,100:00FF9C&height=4" width="100%"/>
 
 </div>
 
-## 📡 PROJECT OVERVIEW
+## 📡 01. ABOUT THE PROJECT
 
-This project turns an Arduino UNO and an ultrasonic sensor into a **radar-style object detection system**.
+The **Ultrasonic Radar System** is an Arduino-powered object detection project that uses an HC-SR04 ultrasonic sensor mounted on a servo motor to scan its surroundings.
 
-A servo motor rotates the HC-SR04 sensor across a scanning range of approximately 180°. At each angle, the sensor measures the distance to a nearby object. Arduino sends the angle and distance readings to a web dashboard through USB serial communication.
+The servo rotates the sensor across an approximately 180° range, collecting distance measurements at different angles.
 
-The dashboard converts these readings into a visual radar display, helping users observe where objects are detected and how far away they are.
+These readings are transmitted to a web-based dashboard through USB serial communication, where JavaScript processes and displays them as a real-time radar visualization.
 
-## 🟢 RADAR DASHBOARD
+The system also includes an LED and buzzer for proximity alerts when an object is detected within the configured 30 cm threshold.
+
+## 🟢 02. PROJECT DEMO
 
 <div align="center">
 
-<img src="https://placehold.co/900x400/020B08/39FF9C?text=ULTRASONIC+RADAR%0AReplace+with+your+dashboard+screenshot" width="100%WhatsApp Image 2026-10-28 at 14 14 25" src="https://github.com/user-attachments/assets/d48ae2fa-17bd-4184-bc4b-f8ae2bae09e7"/>
+### 🔬 Actual Hardware Setup
 
-*Live radar visualization — <img width="1200" height="1600" />
-*
+<img src="./images/ultrasonic-radar-setup.jpeg" width="85%" alt="Actual Ultrasonic Radar Hardware Setup"/>
 
-</div>
+*Arduino hardware setup with ultrasonic sensor, circuit connections and live radar dashboard.*
 
-## ⚙️ HOW IT WORKS
+<br>
 
-<div align="center">
+### 📡 Radar Dashboard
 
-`ULTRASONIC SENSOR` → `ARDUINO UNO` → `USB SERIAL` → `WEB DASHBOARD`
+<img src="https://github.com/user-attachments/assets/d48ae2fa-17bd-4184-bc4b-f8ae2bae09e7" width="85%" alt="Ultrasonic Radar Dashboard"/>
 
-</div>
-
-- **Scan:** The servo rotates the sensor through different angles.
-- **Measure:** The HC-SR04 calculates distance using ultrasonic echo time.
-- **Transmit:** Arduino sends angle-distance readings at 9600 baud.
-- **Visualize:** JavaScript plots the incoming measurements on a radar display.
-- **Alert:** An LED and buzzer activate when a measured distance falls within the configured 30 cm threshold.
-
-## 🔩 HARDWARE SETUP
-
-| Component | Connection |
-|:--|:--:|
-| HC-SR04 TRIG | D9 |
-| HC-SR04 ECHO | D10 |
-| Servo motor signal | D6 |
-| LED | D4 |
-| Buzzer | D5 |
-| Arduino UNO | USB to computer |
-
-## 💻 TECH STACK
-
-`Arduino C++` · `Servo Library` · `HTML` · `CSS` · `JavaScript` · `Canvas API` · `Web Serial API`
-
-## 🚀 GET STARTED
-
-1. Open `Arduino-Ultrasonic-Radar.ino` in Arduino IDE and upload it.
-2. Open `radar.html` in a compatible desktop browser using a local server.
-3. Click the dashboard's connect option and select the Arduino serial port.
-4. Observe the scanning angle, measured distances and proximity alerts.
-
-**Note:** Browser serial access requires a compatible browser and a secure context, such as `localhost`.
-
-
-## 🌐 APPLICATIONS
-
-- Robotics and obstacle-detection experiments
-- Learning ultrasonic sensors and servo control
-- Embedded systems and serial communication
-- Real-time sensor-data visualization
-
----
-
-<div align="center">
-
-**SENSE THE WORLD. VISUALIZE THE SIGNAL.**
-
-*Built by Pratigya Kaushik* 🟢
+*Interactive radar interface displaying scanning angles and object detection.*
 
 </div>
+
+## ⚙️ 03. SYSTEM ARCHITECTURE
+
+<div align="
